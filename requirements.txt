@@ -1,0 +1,10 @@
+ImageDataAugmentor @ git+https://github.com/mjkvaak/ImageDataAugmentor
+#albumentations
+dotmap
+matplotlib
+numpy
+pandas
+seaborn
+scikit-image
+scikit-learn
+tensorflow

@@ -1,0 +1,5 @@
+/.venv
+/utils/__pycache__
+/data/*.zip
+/data/inputs_for_train/*
+submission.csv
