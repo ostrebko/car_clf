@@ -1,8 +1,10 @@
 from tensorflow import keras
 from keras.models import Model
 from keras.applications.efficientnet import EfficientNetB6 as BaseTrainedModel
-from keras.layers import GlobalAveragePooling2D, Dense 
+from keras.layers import GlobalAveragePooling2D, Dense
 from keras.layers import BatchNormalization, Dropout
+# from keras.regularizers import l2
+# from keras.models import load_model
 
 
 class ModelForTrain(Model):
