@@ -42,8 +42,7 @@ def imshow(image_RGB):
 
 
 
-def extract_data_from_zip(path_to_big_zip, path_to_extr_big_zip,
-                          path_data_train, is_true=False):
+def extract_data_from_zip(path_to_big_zip, path_data_train, is_true=False):
     """
     add description params
 
