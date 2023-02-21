@@ -10,10 +10,10 @@
   "BATCH_SIZE" : 64, 
 
   "//" : "zero learning rate, non-change param",
-  "LR0" : 1e-3,
+  "LR0" : 1e-4,
 
   "//" : "learning rate, will change in training model",
-  "LR" : 1e-3,
+  "LR" : 1e-4,
   
   "//" :  "the proportion of data allocated to the test = 20%",
   "VAL_SPLIT" : 0.2,
