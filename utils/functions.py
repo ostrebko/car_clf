@@ -53,7 +53,7 @@ def extract_data_from_zip(path_to_big_zip, path_to_extr_big_zip,
         # Extract zip-archive with all data
         print('Unzip sf-dl-car-classification.zip')
         with zipfile.ZipFile(path_to_big_zip,"r") as z:
-            z.extractall(path_to_extr_big_zip)
+            z.extractall(path_data_train)
 
         
         # Unzip the files so that you can see them..
