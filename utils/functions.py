@@ -51,8 +51,16 @@ def extract_data_from_zip(path_to_big_zip, path_data_train, is_true=False):
     if is_true:
         # Extract zip-archive with all data
         print('Unzip sf-dl-car-classification.zip')
-        with zipfile.ZipFile(path_to_big_zip,"r") as z:
-            z.extractall(path_data_train)
+        #with zipfile.ZipFile(path_to_big_zip,"r") as z:
+        #    z.extractall(path_data_train)
+
+        # Extract to folder 'inputs_for_train' without subfolder 'sf-dl-car-classification'
+        with zipfile.ZipFile(path_to_big_zip) as z_file:
+            for zip_info in z_file.infolist():
+                if zip_info.filename[-1] == '/':
+                    continue
+                zip_info.filename = os.path.basename(zip_info.filename)
+                z_file.extract(zip_info, path_data_train)
 
         
         # Unzip the files so that you can see them..
