@@ -1,5 +1,6 @@
 ImageDataAugmentor @ git+https://github.com/mjkvaak/ImageDataAugmentor
 tensorflow==2.9.1
+efficientnet
 #albumentations
 dotmap
 matplotlib
