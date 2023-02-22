@@ -36,6 +36,7 @@ def create_paths(config):
     return paths
 
 
+
 def imshow(image_RGB):
     io.imshow(image_RGB)
     io.show()
@@ -108,7 +109,7 @@ def callbacks(PATH_BEST_MODEL, config):
 
 
 
-def plot_history(history, PATH_BEST_MODEL, num_step, is_save_fig):
+def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
     
     """
     Function to print pictures of training model history in notebook 
@@ -133,7 +134,7 @@ def plot_history(history, PATH_BEST_MODEL, num_step, is_save_fig):
     plt.legend()
     
     if is_save_fig:
-        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_acc_st_{num_step}.png'))
+        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_acc_st_{step_num}.png'))
 
     #plt.figure()
     plt.figure(figsize=(10,5))
@@ -144,28 +145,35 @@ def plot_history(history, PATH_BEST_MODEL, num_step, is_save_fig):
     plt.legend()
 
     if is_save_fig:
-        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_loss_st_{num_step}.png'))
+        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_loss_st_{step_num}.png'))
     else:
         plt.show()
 
 
-def save_eval_model(PATH_BEST_MODEL, config, model, num_step, test_generator):
+
+def save_model(PATH_BEST_MODEL, config, model, step_num):
     
     # load best weights
     model.load_weights(os.path.join(PATH_BEST_MODEL, config.best_model_name))
     
     # Save model & load best iteration after fitting (best_model):
-    model.save(os.path.join(PATH_BEST_MODEL, f'model_step_{num_step}.h5'))
-    model.save_weights(os.path.join(PATH_BEST_MODEL, f'weights_step_{num_step}.hdf5'))
-    print(f'model and weights of {num_step} traininig are saved in {PATH_BEST_MODEL}')
+    model.save(os.path.join(PATH_BEST_MODEL, f'model_step_{step_num}.h5'))
+    model.save_weights(os.path.join(PATH_BEST_MODEL, f'weights_step_{step_num}.hdf5'))
+    print(f'model and weights of {step_num} traininig are saved in {PATH_BEST_MODEL}')
 
+
+
+def eval_model(model, test_generator):
     scores = model.evaluate(test_generator, verbose=1)
     print("Accuracy: %.2f%%" % (scores[1]*100))
 
 
+
 def get_label_map(paths_dict):
+    
     num_labels = map(os.path.basename, glob(os.path.join(paths_dict.PATH_TO_DATA_TRAIN, '*')))
     label_map_dict = {i : int(i) for i in num_labels}
+
     return label_map_dict
 
 
