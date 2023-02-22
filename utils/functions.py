@@ -155,7 +155,7 @@ def save_eval_model(PATH_BEST_MODEL, config, model, num_step, test_generator):
     model.load_weights(os.path.join(PATH_BEST_MODEL, config.best_model_name))
     
     # Save model & load best iteration after fitting (best_model):
-    model.save(os.path.join(PATH_BEST_MODEL, f'model_step_{num_step}.hdf5'))
+    model.save(os.path.join(PATH_BEST_MODEL, f'model_step_{num_step}.h5'))
     model.save_weights(os.path.join(PATH_BEST_MODEL, f'weights_step_{num_step}.hdf5'))
     print(f'model and weights of {num_step} traininig are saved in {PATH_BEST_MODEL}')
 
