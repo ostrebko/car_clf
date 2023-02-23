@@ -134,7 +134,7 @@ def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
     plt.legend()
     
     if is_save_fig:
-        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_acc_st_{step_num}.png'))
+        plt.savefig(os.path.join(PATH_BEST_MODEL, 'Train_Vall_acc_st_{}.png'.format(step_num)))
 
     #plt.figure()
     plt.figure(figsize=(10,5))
@@ -145,7 +145,7 @@ def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
     plt.legend()
 
     if is_save_fig:
-        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_loss_st_{step_num}.png'))
+        plt.savefig(os.path.join(PATH_BEST_MODEL, 'Train_Vall_loss_st_{}.png'.format(step_num)))
     else:
         plt.show()
 
