@@ -134,7 +134,7 @@ def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
     plt.legend()
     
     if is_save_fig:
-        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_acc_st_{step_num}.png'))
+        plt.savefig(os.path.join(PATH_BEST_MODEL, 'Train_Vall_acc_st_{}.png'.format(step_num)))
 
     #plt.figure()
     plt.figure(figsize=(10,5))
@@ -145,7 +145,7 @@ def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
     plt.legend()
 
     if is_save_fig:
-        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_loss_st_{step_num}.png'))
+        plt.savefig(os.path.join(PATH_BEST_MODEL, 'Train_Vall_loss_st_{}.png'.format(step_num)))
     else:
         plt.show()
 
@@ -157,9 +157,9 @@ def save_model(PATH_BEST_MODEL, config, model, step_num):
     model.load_weights(os.path.join(PATH_BEST_MODEL, config.best_model_name))
     
     # Save model & load best iteration after fitting (best_model):
-    model.save(os.path.join(PATH_BEST_MODEL, f'model_step_{step_num}.h5'))
-    model.save_weights(os.path.join(PATH_BEST_MODEL, f'weights_step_{step_num}.hdf5'))
-    print(f'model and weights of {step_num} traininig are saved in {PATH_BEST_MODEL}')
+    model.save(os.path.join(PATH_BEST_MODEL, 'model_step_{}.h5'.format(step_num)))
+    model.save_weights(os.path.join(PATH_BEST_MODEL, 'weights_step_{}.hdf5'.format(step_num)))
+    print('model and weights of {} step traininig are saved in {}'.format(step_num, PATH_BEST_MODEL))
 
 
 
