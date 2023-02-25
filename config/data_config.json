@@ -2,6 +2,22 @@
   "//" :  "---------------------------------",
   "//" : "Basic settings",
 
+
+  "//" : "Class names",
+  "class_names": [
+    "lada_priora",
+    "ford_focus",
+    "lada_2114",
+    "lada_2110",
+    "lada_2107",
+    "lada_niva",
+    "lada_kalina",
+    "lada_2109",
+    "volkswagen_passat",
+    "lada_21099"
+  ],
+  
+
   "//" : "number of epochs for learning",
   "EPOCHS" : 5, 
   
