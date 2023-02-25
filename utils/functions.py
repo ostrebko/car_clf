@@ -4,9 +4,16 @@ import matplotlib.pyplot as plt
 import os
 from skimage import io
 import zipfile
+from tensorflow import keras
+from keras import optimizers
+import keras.utils as image
 
 from ImageDataAugmentor.image_data_augmentor import *
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau # LearningRateScheduler
+
+from utils.read_config import config_reader
+from utils.model import ModelForTrain
+
 
 
 
@@ -207,6 +214,7 @@ def make_tta(config, test_sub_generator, model, label_map):
     return predictions_tta
 
 
+
 def make_submission(filenames_with_dir, predictions):
     
     submission = pd.DataFrame({'Id':filenames_with_dir, 'Category':predictions}, columns=['Id', 'Category'])
@@ -215,3 +223,61 @@ def make_submission(filenames_with_dir, predictions):
     print('Save submit')
     
     return submission
+
+
+
+def choice_model():
+    
+    d = {}
+    for k, item in enumerate(glob(os.path.join('models', '*'))):
+        d[k+1]=os.path.basename(item)
+    print(f'trained models dict: {d}')
+    select_model_num = int(input('Input model num: '))
+    path_model_name = os.path.join('data/best_models', d[select_model_num])
+    
+    return path_model_name
+
+
+
+def create_model(config_path):
+    
+    # Define configs
+    config = config_reader(config_path)
+    #config.IMG_SIZE = 448
+    
+    # Creating model & compile model
+    model = ModelForTrain(config=config).build_model()
+    model.compile(loss=config.loss_compile, 
+                optimizer=optimizers.Adam(learning_rate=config.LR), 
+                metrics=[config.metric_compile])
+
+    path_model_name = choice_model()
+
+    if os.path.isfile(path_model_name):
+        model.load_weights(path_model_name)
+    
+    print(f'model {os.path.basename(path_model_name)} loaded')
+
+    return model
+
+
+
+def load_image(img_path, show=False):
+
+    img = image.load_img(img_path, target_size=(224, 224))
+    img_tensor = image.img_to_array(img)                    # (height, width, channels)
+    img_tensor = np.expand_dims(img_tensor, axis=0)         # (1, height, width, channels), add a dimension because the model expects this shape: (batch_size, height, width, channels)
+    img_tensor /= 255.                                      # imshow expects values in the range [0, 1]
+
+    if show:
+        plt.imshow(img_tensor[0])                           
+        plt.axis('off')
+        plt.show()
+
+    return img_tensor
+
+
+def select_class(class_num, config_path):
+    # Define configs
+    config = config_reader(config_path)
+    return config.class_names[class_num]

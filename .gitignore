@@ -2,4 +2,5 @@
 /utils/__pycache__
 /data/*.zip
 /data/inputs_for_train/*
+/models/*.hdf5
 submission.csv
