@@ -103,11 +103,20 @@ def make_submission(filenames_with_dir, predictions):
     return submission
 
 
-def create_model(config_path):
+def choice_model():
     
-    # Define configs
-    config = config_reader(config_path)
-    #config.IMG_SIZE = 448
+    d = {}
+    for k, item in enumerate(glob(os.path.join('models', '*'))):
+        d[k+1]=os.path.basename(item)
+    print(f'trained models dict: {d}')
+    select_model_num = int(input('Input model num: '))
+    path_model_name = os.path.join('models', d[select_model_num])
+    
+    return path_model_name
+
+
+
+def create_model(config):
     
     # Creating model & compile model
     model = ModelForTrain(config=config).build_model()
@@ -116,19 +125,18 @@ def create_model(config_path):
                 metrics=[config.metric_compile])
 
     path_model_name = choice_model()
-
+    
     if os.path.isfile(path_model_name):
         model.load_weights(path_model_name)
+        print(f'{os.path.basename(path_model_name)} are loaded in model')
     
-    print(f'model {os.path.basename(path_model_name)} loaded')
-
     return model
 
 
 
-def load_image(img_path, show=False):
+def load_image(img_path, config, show=True):
 
-    img = image.load_img(img_path, target_size=(224, 224))
+    img = image.load_img(img_path, target_size=(config.IMG_SIZE, config.IMG_SIZE))
     img_tensor = image.img_to_array(img)                    # (height, width, channels)
     img_tensor = np.expand_dims(img_tensor, axis=0)         # (1, height, width, channels), add a dimension because the model expects this shape: (batch_size, height, width, channels)
     img_tensor /= 255.                                      # imshow expects values in the range [0, 1]
@@ -136,6 +144,8 @@ def load_image(img_path, show=False):
     if show:
         plt.imshow(img_tensor[0])                           
         plt.axis('off')
-        plt.show()
+        plt.show(block=False)
+        plt.pause(5)
+        plt.close("all")
 
     return img_tensor

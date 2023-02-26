@@ -2,10 +2,9 @@ from dotmap import DotMap
 from glob import glob
 import matplotlib.pyplot as plt
 import os
+import random
 from skimage import io
 import zipfile
-
-from utils.read_config import config_reader
 
 
 
@@ -144,20 +143,6 @@ def get_label_map(paths_dict):
     return label_map_dict
 
 
-
-def choice_model():
-    
-    d = {}
-    for k, item in enumerate(glob(os.path.join('models', '*'))):
-        d[k+1]=os.path.basename(item)
-    print(f'trained models dict: {d}')
-    select_model_num = int(input('Input model num: '))
-    path_model_name = os.path.join('data/best_models', d[select_model_num])
-    
-    return path_model_name
-
-
-def select_class(class_num, config_path):
-    # Define configs
-    config = config_reader(config_path)
-    return config.class_names[class_num]
+def get_rnd_test_image(paths):
+    rnd_img = random.choice(glob(os.path.join(paths.PATH_TO_DATA_TRAIN, '*', '*')))
+    return rnd_img
