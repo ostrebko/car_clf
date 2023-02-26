@@ -143,6 +143,21 @@ def get_label_map(paths_dict):
     return label_map_dict
 
 
-def get_rnd_test_image(paths):
-    rnd_img = random.choice(glob(os.path.join(paths.PATH_TO_DATA_TRAIN, '*', '*')))
-    return rnd_img
+
+def get_rnd_test_image(paths_dict):
+    path_rnd_img = random.choice(glob(os.path.join(paths_dict.PATH_TO_DATA_TEST, '*')))
+    return path_rnd_img
+
+
+
+def get_path_image(paths_dict, is_work_demonstrate=True):
+    if is_work_demonstrate:
+        path_rnd_img = get_rnd_test_image(paths_dict)
+    else:
+        is_path_input = False
+        while not is_path_input:
+            path_rnd_img = input('Input full img path or relative img path in this project: ')
+            is_path_input = os.path.exists(path_rnd_img)
+
+    return path_rnd_img
+        

@@ -64,7 +64,7 @@
   "folder_train_pics" : "train",
 
   "//" :  "directory for test pics",
-  "folder_test_pics" : "test",
+  "folder_test_pics" : "test_upload",
 
   "//" :  "name for general zip-file with data",
   "zip_file_name" : "sf-dl-car-classification.zip",
@@ -130,9 +130,10 @@
   "//" :  "model name",
   "model_name" : "Custom model",
 
-  "//" :  "show or hide summary",
+  "//" :  "show or hide summary and trainings layers",
   "is_show_summary" : false,
-
+  "is_show_train_layers" : true,
+  
   "//" :  "fine tinnig coef for unfreeze layers",
   "f_tune_coef" : 1,
 
@@ -146,9 +147,16 @@
   "metric_compile" : "accuracy",
 
 
+
   "//" :  "---------------------------------",
   "//" :  "Settings for TTA",
   "steps_for_tta" : 10,
+  
+
+
+  "//" :  "---------------------------------",
+  "//" :  "Prediction params",
+  "continue_predict" : true,
   
 
 

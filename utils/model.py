@@ -8,6 +8,7 @@ from keras.layers import BatchNormalization, Dropout
 # from keras.models import load_model
 
 
+
 class ModelForTrain(Model):
     """
     Class creates model e.g. EfficientNetB6, inheriting class from tensorflow.keras.models.
@@ -22,6 +23,7 @@ class ModelForTrain(Model):
         super().__init__()
         
         self.is_show_summary = config.is_show_summary
+        self.is_show_train_layers = config.is_show_train_layers
         # ------- parameters ------------
         #self.config = config
         
@@ -65,13 +67,11 @@ class ModelForTrain(Model):
         ) 
         if self.is_show_summary:
             model.summary() # shows model summary
-            
+        
+        if self.is_show_train_layers:
             # numbers of layers and training variables
             print(f'Number of model layers: {len(model.layers)}')
             print(f'Number of trainable_variables in model: {len(model.trainable_variables)}')
         
-        else:
-            print(f'Number of model layers: {len(model.layers)}')
-            print(f'Number of trainable_variables in model: {len(model.trainable_variables)}')
         
         return model

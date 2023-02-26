@@ -2,6 +2,8 @@ from dotmap import DotMap
 from glob import glob
 import matplotlib.pyplot as plt
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 
 from tensorflow import keras
 from keras import optimizers
@@ -103,28 +105,34 @@ def make_submission(filenames_with_dir, predictions):
     return submission
 
 
-def choice_model():
+def choice_model(is_choice_by_input):
     
     d = {}
     for k, item in enumerate(glob(os.path.join('models', '*'))):
         d[k+1]=os.path.basename(item)
-    print(f'trained models dict: {d}')
-    select_model_num = int(input('Input model num: '))
+    
+    if is_choice_by_input:
+        print(f'trained models dict: {d}')
+        select_model_num = int(input('Input model num: '))
+    else:
+        select_model_num = list(d.keys())[-1]
     path_model_name = os.path.join('models', d[select_model_num])
     
     return path_model_name
 
 
 
-def create_model(config):
+def create_model(config, is_choice_by_input):
     
+    config.IMG_SIZE = 448
+    config.is_show_train_layers = False
     # Creating model & compile model
     model = ModelForTrain(config=config).build_model()
     model.compile(loss=config.loss_compile, 
-                optimizer=optimizers.Adam(learning_rate=config.LR), 
-                metrics=[config.metric_compile])
+                  optimizer=optimizers.Adam(learning_rate=config.LR), 
+                  metrics=[config.metric_compile])
 
-    path_model_name = choice_model()
+    path_model_name = choice_model(is_choice_by_input)
     
     if os.path.isfile(path_model_name):
         model.load_weights(path_model_name)
@@ -136,6 +144,7 @@ def create_model(config):
 
 def load_image(img_path, config, show=True):
 
+    config.IMG_SIZE = 448
     img = image.load_img(img_path, target_size=(config.IMG_SIZE, config.IMG_SIZE))
     img_tensor = image.img_to_array(img)                    # (height, width, channels)
     img_tensor = np.expand_dims(img_tensor, axis=0)         # (1, height, width, channels), add a dimension because the model expects this shape: (batch_size, height, width, channels)

@@ -1,15 +1,20 @@
 from utils.predictions import create_prediction
 from utils.read_config import config_reader
-from utils.functions import get_rnd_test_image, create_paths
+from utils.functions import get_rnd_test_image, create_paths, get_path_image
+from utils.functions_with_keras import create_model
 
 
 if __name__ == "__main__":
     
+    demonstrate_mode = True
     config = config_reader('config/data_config.json')
-    config.IMG_SIZE = 448
     paths = create_paths(config, is_notebook=False)
+    model = create_model(config, is_choice_by_input=False)
 
-    # image path
-    random_img_path = get_rnd_test_image(paths)
-    prediction = create_prediction(random_img_path, config)
-    print(f'predicted class name: {prediction}')
+    while config.continue_predict:
+        img_path = get_path_image(paths, is_work_demonstrate=demonstrate_mode)
+        create_prediction(img_path, config, model)
+        
+        num_choise = input('input any num or simbol to continue predict, to exit - 0: ')
+        if num_choise == '0':
+            break
