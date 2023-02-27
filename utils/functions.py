@@ -12,10 +12,15 @@ import zipfile
 def create_paths(config, is_notebook=True):
     
     """
-    create paths for data: for notebook is_notebook=True or for main.py is_notebook=False
+    Create paths to read, save and load data, models for train and inference
+    
+    -------
     params:
-    config - config from class config_reader
-
+    
+    config - dict (Dotmap) from configuration file with defined parameters values 
+             (creates from config_reader function by reading data_config.json)
+    is_notebook=True for notebook train or is_notebook=False for main.py inference
+    
     """
     
     paths_dict = dict()
@@ -45,8 +50,13 @@ def create_paths(config, is_notebook=True):
 
 def imshow(image_RGB):
     """
-    Simple function to show image in RGB
-    image_RGB from PIL.Image.open
+    Simple function to show image in RGB mode
+    
+    -------
+    
+    params:
+    image_RGB - data from PIL.Image.open
+    
     """
     io.imshow(image_RGB)
     io.show()
@@ -54,22 +64,23 @@ def imshow(image_RGB):
 
 
 def extract_data_from_zip(path_to_big_zip, path_data_train, is_true=False):
+    
     """
-    function for extract data from zip-archive sf-dl-car-classification.zip
+    Function for extract data from zip-archive sf-dl-car-classification.zip
     and creates folders
+    
     -------
     params:
+
     path_to_big_zip - path to sf-dl-car-classification.zip, defined in config
     path_data_train - path to unzip data, defined in config
-
+    
     """
 
     if is_true:
         # Extract zip-archive with all data
         print('Unzip sf-dl-car-classification.zip')
-        #with zipfile.ZipFile(path_to_big_zip,"r") as z:
-        #    z.extractall(path_data_train)
-
+        
         # Extract to folder 'inputs_for_train' without subfolder 'sf-dl-car-classification'
         with zipfile.ZipFile(path_to_big_zip) as z_file:
             for zip_info in z_file.infolist():
@@ -100,8 +111,13 @@ def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
     Function to print pictures of training model history in notebook 
     with possibility locally saving
     
-    history - create from model.fit
-        
+    -------
+    params:
+    
+    history - train hystory which created from model.fit
+    PATH_BEST_MODEL - path to save fig if is_save_fig=True
+    is_save_fig - True (save fig) or False (show fig)
+    
     """
     
     plt.figure(figsize=(10,5))
@@ -137,22 +153,45 @@ def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
 
 def get_label_map(paths_dict):
     
-    num_labels = map(os.path.basename, glob(os.path.join(paths_dict.PATH_TO_DATA_TRAIN, '*')))
+    """
+    Function for creating label map dict 
+    uses for submission to Kaggle.
+    
+    -------
+    params:
+    
+    paths_dict - dict of paths which created from create_paths func
+    
+    """
+    
+    num_labels = map(os.path.basename, 
+                     glob(os.path.join(paths_dict.PATH_TO_DATA_TRAIN, '*')))
     label_map_dict = {i : int(i) for i in num_labels}
 
     return label_map_dict
 
 
 
-def get_rnd_test_image(paths_dict):
-    path_rnd_img = random.choice(glob(os.path.join(paths_dict.PATH_TO_DATA_TEST, '*')))
-    return path_rnd_img
-
-
-
 def get_path_image(paths_dict, is_work_demonstrate=True):
+    
+    """
+    Function to image path:
+    random path image from 'test_upload' folder or
+    image path from 'handly' input
+    
+    -------
+    params:
+    
+    paths_dict - dict of paths which created from create_paths func
+    is_work_demonstrate=True - return random path
+    is_work_demonstrate=False - ask to input img path, check inputed path and 
+                                return it if image exists
+    
+    """
+    
     if is_work_demonstrate:
-        path_rnd_img = get_rnd_test_image(paths_dict)
+        path_rnd_img = random.choice(glob(os.path.join(paths_dict.PATH_TO_DATA_TEST, '*')))
+    
     else:
         is_path_input = False
         while not is_path_input:

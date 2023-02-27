@@ -20,7 +20,17 @@ from utils.model import ModelForTrain
 def callbacks(PATH_BEST_MODEL, config):                               
 
     """
-    Add description
+    Function creates callback list from Keras callbacks, that used in fit method
+    List consists 3 function: ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+    (for a detailed description, see: https://keras.io/api/callbacks/)
+    
+    -------
+    params:
+
+    PATH_BEST_MODEL - path to save model with best params during model train
+    config - dict (Dotmap) from configuration file with defined parameters values 
+             (creates from config_reader function by reading data_config.json)
+
     """
 
     checkpoint = ModelCheckpoint(os.path.join(PATH_BEST_MODEL, config.best_model_name), 
@@ -48,6 +58,22 @@ def callbacks(PATH_BEST_MODEL, config):
 
 def save_model(PATH_BEST_MODEL, config, model, step_num):
     
+    """
+    Function loads to model best saved weights after train model from PATH_BEST_MODEL,
+    renames with num step and saves best weights and model to PATH_BEST_MODEL folder 
+
+    -------
+    params:
+
+    PATH_BEST_MODEL - path to save model with best params during model train
+    config - dict (Dotmap) from configuration file with defined parameters values 
+             (creates from config_reader function by reading data_config.json)
+    model - model after one or few steps train
+    step_num - number (int) of step train model (steps differs from each other
+               with params, e.g.: numb of frozen layers img size, batch size e.t.c.)
+
+    """
+
     # load best weights
     model.load_weights(os.path.join(PATH_BEST_MODEL, config.best_model_name))
     
