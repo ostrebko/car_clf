@@ -66,6 +66,9 @@
   "//" :  "directory for test pics",
   "folder_test_pics" : "test_upload",
 
+  "//" :  "directory for trained model",
+  "folder_models" : "models",
+  
   "//" :  "name for general zip-file with data",
   "zip_file_name" : "sf-dl-car-classification.zip",
 
