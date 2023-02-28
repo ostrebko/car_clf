@@ -5,6 +5,20 @@ from utils.functions_with_keras import load_image
 
 
 def create_prediction(img_path, config, model):
+    
+    """
+    Function for creating prediction (classification) for one image.
+    
+    -------
+    params:
+    
+    img_path - path for image
+    config - dict (Dotmap) from configuration file with defined parameters values 
+             (creates from config_reader function by reading data_config.json)
+    model - compiled (and trained) Keras model to create prediction
+
+    """
+
 
     # load a single image
     new_image = load_image(img_path, config)
