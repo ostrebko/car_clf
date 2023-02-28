@@ -59,7 +59,7 @@ def callbacks(PATH_BEST_MODEL, config):
 def save_model(paths, config, model, step_num):
     
     """
-    Function loads to model best saved weights after train model from PATH_BEST_MODEL,
+    Function loads best saved weights to model after model training from PATH_BEST_MODEL,
     renames with num step and saves best weights and model to 'models' folder 
 
     -------
@@ -111,7 +111,6 @@ def make_predictions(test_sub_generator, model, label_map):
     -------
     params:
 
-    model - compiled Keras model for evaluating 
     test_sub_generator - generator which created with DataFrame from 'sample_submission.csv'
                          (uses photos from folder 'test_upload').
                          There were used AUGMENTATIONS=None when define this method from class.
@@ -142,7 +141,8 @@ def make_tta(config, test_sub_generator, model, label_map):
     -------
     params:
 
-    model - compiled Keras model for evaluating 
+    config - dict (Dotmap) from configuration file with defined parameters values 
+             (creates from config_reader function by reading data_config.json)
     test_sub_generator - generator which created with DataFrame from 'sample_submission.csv'
                          (uses photos from folder 'test_upload').
                          There were used AUGMENTATIONS != None when define this method from class.
@@ -195,7 +195,7 @@ def make_submission(filenames_with_dir, predictions):
 def choice_model(is_choice_by_input):
     
     """
-    Simple function for choose name of trained model from 'models' folder.
+    Simple function for choosing name of trained model from 'models' folder.
     
     -------
     params:
@@ -223,7 +223,7 @@ def choice_model(is_choice_by_input):
 def create_model(config, is_choice_by_input):
     
     """
-    Function for choose name of trained model from 'models' folder.
+    Function for choosing name of trained model from 'models' folder.
     
     -------
     params:
@@ -262,7 +262,7 @@ def load_image(img_path, config, show=True):
     -------
     params:
 
-    img_path - path for image, 
+    img_path - path for image 
     config - dict (Dotmap) from configuration file with defined parameters values 
              (creates from config_reader function by reading data_config.json)
     show - boolean. If True - shows image for 5 seconds, False - don't show.

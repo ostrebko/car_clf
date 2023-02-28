@@ -68,7 +68,7 @@ def imshow(image_RGB):
 def extract_data_from_zip(path_to_big_zip, path_data_train, is_true=False):
     
     """
-    Function for extract data from zip-archive sf-dl-car-classification.zip
+    Function for extracting data from zip-archive sf-dl-car-classification.zip
     and creates folders
     
     -------
