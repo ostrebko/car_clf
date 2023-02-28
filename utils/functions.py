@@ -27,8 +27,10 @@ def create_paths(config, is_notebook=True):
 
     if is_notebook:
         paths_dict['PATH_DATA'] = os.path.join('..', config.PATH_DATA)
+        paths_dict['PATH_MODELS'] = os.path.join('..', config.folder_models)
     else: 
         paths_dict['PATH_DATA'] = config.PATH_DATA
+        paths_dict['PATH_MODELS'] = config.folder_models
 
     paths_dict['PATH_DATA_TRAIN'] = os.path.join(paths_dict['PATH_DATA'], 
                                                  config.folder_data_train)
@@ -105,7 +107,7 @@ def extract_data_from_zip(path_to_big_zip, path_data_train, is_true=False):
 
 
 
-def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
+def plot_history(history, PATH_TO_SAVE, step_num, is_save_fig):
     
     """
     Function to print pictures of training model history in notebook 
@@ -135,7 +137,7 @@ def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
     plt.legend()
     
     if is_save_fig:
-        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_acc_st_{step_num}.png'))
+        plt.savefig(os.path.join(PATH_TO_SAVE, f'Train_Vall_acc_st_{step_num}.png'))
 
     #plt.figure()
     plt.figure(figsize=(10,5))
@@ -146,7 +148,7 @@ def plot_history(history, PATH_BEST_MODEL, step_num, is_save_fig):
     plt.legend()
 
     if is_save_fig:
-        plt.savefig(os.path.join(PATH_BEST_MODEL, f'Train_Vall_loss_st_{step_num}.png'))
+        plt.savefig(os.path.join(PATH_TO_SAVE, f'Train_Vall_loss_st_{step_num}.png'))
     else:
         plt.show()
 

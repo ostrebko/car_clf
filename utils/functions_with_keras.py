@@ -56,16 +56,16 @@ def callbacks(PATH_BEST_MODEL, config):
 
 
 
-def save_model(PATH_BEST_MODEL, config, model, step_num):
+def save_model(paths, config, model, step_num):
     
     """
     Function loads to model best saved weights after train model from PATH_BEST_MODEL,
-    renames with num step and saves best weights and model to PATH_BEST_MODEL folder 
+    renames with num step and saves best weights and model to 'models' folder 
 
     -------
     params:
 
-    PATH_BEST_MODEL - path to save model with best params during model train
+    PATH_BEST_MODEL - path to load weights with best params after training model
     config - dict (Dotmap) from configuration file with defined parameters values 
              (creates from config_reader function by reading data_config.json)
     model - model after one or few steps train
@@ -75,22 +75,52 @@ def save_model(PATH_BEST_MODEL, config, model, step_num):
     """
 
     # load best weights
-    model.load_weights(os.path.join(PATH_BEST_MODEL, config.best_model_name))
+    model.load_weights(os.path.join(paths.PATH_BEST_MODEL, config.best_model_name))
     
     # Save model & load best iteration after fitting (best_model):
-    model.save(os.path.join(PATH_BEST_MODEL, f'model_step_{step_num}.h5'))
-    model.save_weights(os.path.join(PATH_BEST_MODEL, f'weights_step_{step_num}.hdf5'))
-    print(f'model and weights of {step_num} step traininig are saved in {PATH_BEST_MODEL}')
+    model.save(os.path.join(paths.PATH_MODELS, f'model_step_{step_num}.h5'))
+    model.save_weights(os.path.join(paths.PATH_MODELS, f'weights_step_{step_num}.hdf5'))
+    print(f'model and weights of {step_num} step traininig are saved in {paths.PATH_MODELSL}')
 
 
 
 def eval_model(model, test_generator):
+    
+    """
+    Function to evaluate the metric accuracy of trained or compiled model
+    
+    -------
+    params:
+
+    model - compiled Keras model for evaluating 
+    test_generator - test generator (generator without augmentations)
+
+    """
+    
     scores = model.evaluate(test_generator, verbose=1)
     print("Accuracy: %.2f%%" % (scores[1]*100))
 
 
 
-def make_predictions(config, test_sub_generator, model, label_map):
+def make_predictions(test_sub_generator, model, label_map):
+
+    """
+    Function to make predictions (without using augmentations) 
+    from folder 'test_upload' and using DataFrame from 'sample_submission.csv'
+        
+    -------
+    params:
+
+    model - compiled Keras model for evaluating 
+    test_sub_generator - generator which created with DataFrame from 'sample_submission.csv'
+                         (uses photos from folder 'test_upload').
+                         There were used AUGMENTATIONS=None when define this method from class.
+                         (see class create_generator in generator.py)
+    model - compiled (and trained) Keras model to create prediction
+    label_map - dict with form {str(cls_numb): cls_numb} with all class numbs. 
+                Uses for creation to Kaggle predict form
+
+    """
 
     test_sub_generator.reset()
     pred = model.predict(test_sub_generator, steps=len(test_sub_generator),  verbose=1) 
@@ -104,6 +134,25 @@ def make_predictions(config, test_sub_generator, model, label_map):
 
 def make_tta(config, test_sub_generator, model, label_map):
     
+    """
+    Function to make predictions with test time augmentations 
+    (predictions with using augmentations) 
+    from folder 'test_upload' and using DataFrame from 'sample_submission.csv'
+        
+    -------
+    params:
+
+    model - compiled Keras model for evaluating 
+    test_sub_generator - generator which created with DataFrame from 'sample_submission.csv'
+                         (uses photos from folder 'test_upload').
+                         There were used AUGMENTATIONS != None when define this method from class.
+                         (see class create_generator in generator.py)
+    model - compiled (and trained) Keras model to create prediction
+    label_map - dict with form {str(cls_numb): cls_numb} with all class numbs. 
+                Uses for creation to Kaggle predict form
+
+    """
+
     tta_steps = config.steps_for_tta
     predictions_list = []
 
@@ -116,13 +165,25 @@ def make_tta(config, test_sub_generator, model, label_map):
     predictions_tta = np.argmax(pred, axis=-1) #multiple categories
     label_map = dict((v,k) for k,v in label_map.items()) #flip k,v
     predictions_tta = [label_map[k] for k in predictions_tta]
-    
+
     return predictions_tta
 
 
 
 def make_submission(filenames_with_dir, predictions):
     
+    """
+    Function to make submission for Kaggle competition
+        
+    -------
+    params:
+
+    filenames_with_dir - filenames from 'test_upload', creates from test_sub_generator.filenames
+    predictions - predictions for images in folder 'test_upload'
+                  with using trained model and test_sub_generator
+
+    """
+
     submission = pd.DataFrame({'Id':filenames_with_dir, 'Category':predictions}, columns=['Id', 'Category'])
     submission['Id'] = submission['Id'].replace('test_upload/','')
     submission.to_csv('submission.csv', index=False)
@@ -133,6 +194,17 @@ def make_submission(filenames_with_dir, predictions):
 
 def choice_model(is_choice_by_input):
     
+    """
+    Simple function for choose name of trained model from 'models' folder.
+    
+    -------
+    params:
+    is_choice_by_input - boolean. If True - allows to choose and return
+                         one of the model names from 'models' folder.
+                         If false - return model name from last saved step 
+
+    """
+
     d = {}
     for k, item in enumerate(glob(os.path.join('models', '*'))):
         d[k+1]=os.path.basename(item)
@@ -150,6 +222,20 @@ def choice_model(is_choice_by_input):
 
 def create_model(config, is_choice_by_input):
     
+    """
+    Function for choose name of trained model from 'models' folder.
+    
+    -------
+    params:
+    config - dict (Dotmap) from configuration file with defined parameters values 
+             (creates from config_reader function by reading data_config.json)
+    is_choice_by_input - boolean. If True - allows to choose and return
+                         one of the model names from 'models' folder.
+                         If false - return model name from last saved step 
+
+    """
+
+
     config.IMG_SIZE = 448
     config.is_show_train_layers = False
     # Creating model & compile model
@@ -170,11 +256,26 @@ def create_model(config, is_choice_by_input):
 
 def load_image(img_path, config, show=True):
 
+    """
+    Function for creating image tensor to predict by Keras model.
+
+    -------
+    params:
+
+    img_path - path for image, 
+    config - dict (Dotmap) from configuration file with defined parameters values 
+             (creates from config_reader function by reading data_config.json)
+    show - boolean. If True - shows image for 5 seconds, False - don't show.
+    
+    """
+
     config.IMG_SIZE = 448
     img = image.load_img(img_path, target_size=(config.IMG_SIZE, config.IMG_SIZE))
-    img_tensor = image.img_to_array(img)                    # (height, width, channels)
-    img_tensor = np.expand_dims(img_tensor, axis=0)         # (1, height, width, channels), add a dimension because the model expects this shape: (batch_size, height, width, channels)
-    img_tensor /= 255.                                      # imshow expects values in the range [0, 1]
+    img_tensor = image.img_to_array(img)              # (height, width, channels)
+    img_tensor = np.expand_dims(img_tensor, axis=0)   # (1, height, width, channels), 
+                                                      # add a dimension because the model expects this 
+                                                      # shape: (batch_size, height, width, channels)
+    img_tensor /= 255.                                # imshow expects values in the range [0, 1]
 
     if show:
         plt.imshow(img_tensor[0])                           
