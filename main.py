@@ -1,6 +1,6 @@
 from utils.predictions import create_prediction
 from utils.read_config import config_reader
-from utils.functions import get_rnd_test_image, create_paths, get_path_image
+from utils.functions import create_paths, get_path_image
 from utils.functions_with_keras import create_model
 
 
