@@ -44,6 +44,8 @@ def create_paths(config, is_notebook=True):
                                                     config.folder_train_pics)
     paths_dict['PATH_TO_DATA_TEST'] = os.path.join(paths_dict['PATH_DATA_TRAIN'], 
                                                    config.folder_test_pics)
+    paths_dict['PATH_TO_TEST_PREDICTIONS'] = os.path.join(paths_dict['PATH_DATA'], 
+                                                          config.test_imgs_for_pred)
     paths = DotMap(paths_dict)
     
     return paths
@@ -192,7 +194,8 @@ def get_path_image(paths_dict, is_work_demonstrate=True):
     """
     
     if is_work_demonstrate:
-        path_rnd_img = random.choice(glob(os.path.join(paths_dict.PATH_TO_DATA_TEST, '*')))
+        path_rnd_img = random.choice(glob(
+            os.path.join(paths_dict.PATH_TO_TEST_PREDICTIONS, '*')))
     
     else:
         is_path_input = False

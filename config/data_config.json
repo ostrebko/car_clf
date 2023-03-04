@@ -68,6 +68,9 @@
 
   "//" :  "directory for trained model",
   "folder_models" : "models",
+
+  "//" :  "directory for random inference",
+  "test_imgs_for_pred" : "test_imgs_for_pred",
   
   "//" :  "name for general zip-file with data",
   "zip_file_name" : "sf-dl-car-classification.zip",
