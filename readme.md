@@ -48,6 +48,7 @@ car_clf
 │   │   ├── test_upload  
 │   │   ├── train  
 │   │   ├── sample-submission.csv  
+│   │   ├── test_imgs_for_pred
 │   │   └── train.csv  
 │   ├── outputs_from_train  
 │   ├── data_2_load.md  
