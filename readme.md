@@ -163,6 +163,13 @@ pip install ipykernel
 </details>
 
 
+## Loading data
+<details>
+Before training the model, it is necessary to download training dataset. 
+
+...
+</details>
+
 
 ## Other temp text for create readme
 <details>
