@@ -80,7 +80,6 @@ car_clf
 │   │   └── train.csv  
 │   ├── outputs_from_train  ## folder for saved graph
 │   ├── test_imgs_for_pred  ## folder with few samples in test_upload
-│   ├── data_2_load.md      ## file with links to training dataset
 │   └── sf-dl-car-classification.zip ## uploaded zip train dataset 
 ├── models                  ## folder for trained model
 │   ├── weights_step_1.hdf5  
@@ -165,15 +164,58 @@ pip install ipykernel
 
 ## Loading data
 <details>
-Before training the model, it is necessary to download training dataset. 
+<p>Before training the model, it's necessary to download training dataset. **Attention**, it requires **1,66 Gb** of free disk spaces.</p>
+<p>If you want to train the model in local machine, go to the [**Kaggle web page**](https://www.kaggle.com/competitions/sf-dl-car-classification/data/) in your browser and tap **Download All**, the file *'sf-dl-car-classification.zip'* will start downloading. Then move downloaded *'sf-dl-car-classification.zip'* in 'data' folder of the cloned project.</p>
+<p>If you use notebook **'02_colab_notebook_train_model.ipynb'** for train model with Google Colab, you don't need to download data to local machine. Notebook consist cells with code to download *'sf-dl-car-classification.zip'* into cloned project in Goole Colab environment.</p>
+<p>You also may to use Kaggle API to download -> *'kaggle competitions download -c sf-dl-car-classification'* 
+(see. [Kaggle API in github](https://github.com/Kaggle/kaggle-api) ).</p>
+<p>To unzip *'sf-dl-car-classification.zip'* into cloned project use the corresponding notebook cells.</p>
+</details>
 
-...
+
+## Training model
+<details>
+add description
+.....
+</details>
+
+
+## Inference
+<details>
+add description
+.....
+</details>
+
+
+## Docker
+<details>
+
+<summary> Display how to create and run docker image  </summary> <br>
+
+```Python
+# 1. Create a new image (its size is approximately 3.5 Gb)
+docker build -t car_clf .
+
+# 2. Run image in container.
+docker run --rm -v $PWD/data/test_imgs_for_pred/:/data/test_imgs_for_pred  --name car_clf car_clf
+
+# 3. The created container will be automatically deleted 
+# after executing a sequence of commands from the Dockerfile.  
+# Delete the container and image after usage
+docker rmi car_clf
+```
+</details>
+
+
+## Flask
+<details>
+add description
+.....
 </details>
 
 
 ## Other temp text for create readme
 <details>
-Данные для обучения модели (kaggle competitions download -c sf-dl-car-classification) решения проводятся в соответствующем соревновании на Kaggle (https://www.kaggle.com/c/sf-dl-car-classification). Данные для иных площадок можно скачать из датасета (приведено в файле data_2_load.md).  
 
 Основной ход моего решения заключался в следующем:  
 1. Установка и импорт необходимых библиотек, в т.ч. определение основных переменных и создание необходимых папок для сохранения результатов; Прим.: [Решение ошибки в Keras](https://discuss.tensorflow.org/t/using-efficientnetb0-and-save-model-will-result-unable-to-serialize-2-0896919-2-1128857-2-1081853-to-json-unrecognized-type-class-tensorflow-python-framework-ops-eagertensor/12518/9). Для запуска ноутбука в виртуальном окружении: open the Command Palette, and select "Notebook: Select Notebook Kernel" -> далее меняем c global на python path -> выбираем env.  
