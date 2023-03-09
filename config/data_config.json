@@ -163,6 +163,7 @@
   "//" :  "---------------------------------",
   "//" :  "Prediction params",
   "continue_predict" : true,
+  "demo" : {"1": true, "0": false},
   
 
 
