@@ -1,6 +1,9 @@
 import os
 import numpy as np
 from utils.functions_with_keras import load_image
+from utils.functions import create_paths, get_path_image
+from utils.functions_with_keras import create_model
+
 
 
 
@@ -35,4 +38,32 @@ def create_prediction(img_path, config, model):
 
 
 
+def make_predictions(config):
+    
+    """
+    Function for creating predictions (classification) for images.
+    
+    -------
+    params:
+    
+    config - dict (Dotmap) from configuration file with defined parameters values 
+             (creates from config_reader function by reading data_config.json)
+    
+    param 'is_choice_by_input' in 'create_model' class makes it possible 
+            to select a trained model
 
+    """
+
+
+    demonstrate_mode = config.demo[input('input 1 - to run in demonstrate mode, '
+                                         '0 - to run with handle input image path ' )]
+    paths = create_paths(config, is_notebook=False)
+    model = create_model(config, is_choice_by_input=False)
+
+    while config.continue_predict:
+        img_path = get_path_image(paths, is_work_demonstrate=demonstrate_mode)
+        create_prediction(img_path, config, model)
+        
+        num_choise = input('input any num or simbol to continue predict, to exit - 0: ')
+        if num_choise == '0':
+            break
