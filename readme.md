@@ -175,8 +175,50 @@ pip install ipykernel
 
 ## Training model
 <details>
-add description
-.....
+<p>Basic steps of model preparation:  
+
+1. Installing and importing the necessary libraries, functions and classes, fixing seed values, creating the necessary folders for data and saving results and unpacking the 'sf-dl-car-classification' archive.zip' (if not done earlier);  
+Note: [Solving a possible error in Keras](https://discuss.tensorflow.org/t/using-efficientnetb0-and-save-model-will-result-unable-to-serialize-2-0896919-2-1128857-2-1081853-to-json-unrecognized-type-class-tensorflow-python-framework-ops-eagertensor/12518/9)  
+2. Conducting a brief EDA, including analysis of available images;
+3. Сreating a data augmentation object (using the **Albumentations** library) and creating data generators (using the **ImageDataAugmentor** library) to feed data in batches to the model during training;
+4. The **Transfer-Learning** technique was used to create the model. As a basis, **EfficientNetB6** was loaded with the exception of fully connected layers (excluding the "head"). Instead of the excluded layers, fully connected layers were completed for our task. To create a model for training, the **ModelForTrain** class was written with a calling *build_model* method;  
+5. The model training was based on the **Fine-Tuning** technique: the model training was carried out with gradual defrosting of the model layers and consisted of several steps (step):  
+    **Step 1** - training of layer weights only for the "head", with constant EfficientNetB6 weights (after this step, the accuracy on the training sample exceeds 50%, on the test sample exceeds 60%). Since in the future the weights will be retrained when the model is defrosted, a small number of training epochs were selected at this stage. Note: The accuracy on the training sample turns out to be worse than the accuracy on the test sample, but by the 5th epoch, the accuracy of the test sample ceases to improve, and the accuracy of the training sample grows faster (see. Train history of accuracy and loss in Pic.1).<br>
+
+    <p align="center">
+      <img src="data/outputs_from_train/step_1_acc_train.png" height="240" title="history_acc_train step_1">
+      <img src="data/outputs_from_train/step_1_loss_train.png" height="240" title="history_loss_train step_1">
+    </p> 
+
+    **Step 2-4** - training with gradual defrosting of body weights (i.e. layers of EfficientNetB6). Step 2: defrost 1/2 from all layers EfficientNetB6, training 10 epochs; Step 3: defrost 3/4 from all layers EfficientNetB6, training 10 epochs; Step 4: defrost all layers EfficientNetB6, training 10 epochs.<br> 
+    Learning outcomes in steps 2-4:<br>
+    The best convergence of the training and test samples is achieved after **Step 2** (defrosting 1/2 of all the layers of EfficientNetB6) at the 10th epoch and is slightly more than 90%. At this stage, you can try a larger number of epochs (30-50 epochs) with a gradual (according to the schedule or according to the condition of non-exaggeration of val_accuracy) decrease in the Learning Rate. But since in Colab the training time is limited by the amount of GPU usage time and the layers will be unfrozen further, respectively, the trained weights will still change, it was decided not to work in this direction.<br>
+
+    <p align="center">
+      <img src="data/outputs_from_train/step_2_acc_train.png" height="240" title="history_acc_train step_2">
+      <img src="data/outputs_from_train/step_2_loss_train.png" height="240" title="history_loss_train step_2">
+    </p> 
+
+    At **step 3**, 3/4 of all layers was defrosted and 10 epochs trained.<br>
+
+    <p align="center">
+      <img src="data/outputs_from_train/step_3_acc_train.png" height="240" title="history_acc_train step_3">
+      <img src="data/outputs_from_train/step_3_loss_train.png" height="240" title="history_loss_train step_3">
+    </p> 
+
+    At **step 4**, all base_model layers (all EfficientNetB6 layers) was defrosted and 10 epochs trained.<br>
+
+    <p align="center">
+      <img src="data/outputs_from_train/step_4_acc_train.png" height="240" title="history_acc_train step_4">
+      <img src="data/outputs_from_train/step_4_loss_train.png" height="240" title="history_loss_train step_4">
+    </p> 
+
+    After **Step 3** the accuracy and loss of train and test dataset are diverge, but accuracy on test dataset has a better value than in the previous **Step 2** (see Pic.3). So we try to defrost all layers and train **Step 4**. After **Step 4** it can be seen that the accuracy and loss of train and test dataset are diverge less. The test accuracy continues to grow, and loss continues to continues to decrease. So it time to try **Step 5** to get better training results.<br>
+
+    **Steps 5, 6, 7**: At these steps, in order to increase the accuracy of training the model, the size of the submitted images is increased by 2 times (from 224x228 to 448x448 dots). Learning occurs with all unfrozen layers, but the learning rate changes: **Step 5**: LR=1e-5, 8 epochs; **Step 6**: LR=1e-5, 6 epochs (cause Colab disabling GPU); **Step 7** LR=1e-6, 10 epochs. Note: On **Step 6**, it was decided to add 6 epochs without changing the parameters of **Step 5**.<br>
+    It is important to note that when the image is enlarged by 2 times, the training time has increased by about 3-4 times and the training of 10 epochs of each step stretches to about 6.5 hours. Due to the fact that Google Colab has a limit on the operation of one session with the GPU, **Step 5** and **Step 6** were separated. If you can to train 20 epoch without stopping train, change: config.EPOCHS = 20 and skip **Step 6**.<br>
+    At **Step 7**, the only *patience* parameter in the callback *ReduceLROnPlateau* was changed from 3 to 2.<br>
+
 </details>
 
 
@@ -223,24 +265,8 @@ add description
 ## Other temp text for create readme
 <details>
 
-Основной ход моего решения заключался в следующем:  
-1. Установка и импорт необходимых библиотек, в т.ч. определение основных переменных и создание необходимых папок для сохранения результатов; Прим.: [Решение ошибки в Keras](https://discuss.tensorflow.org/t/using-efficientnetb0-and-save-model-will-result-unable-to-serialize-2-0896919-2-1128857-2-1081853-to-json-unrecognized-type-class-tensorflow-python-framework-ops-eagertensor/12518/9). Для запуска ноутбука в виртуальном окружении: open the Command Palette, and select "Notebook: Select Notebook Kernel" -> далее меняем c global на python path -> выбираем env.  
-2. Проведение краткого EDA, в т.ч. анализ имеющихся изображений;
-3. Аугментация данных (использовалась библиотека albumentations) и создание соответствующих генераторов (с помощью библиотеки ImageDataAugmentor) для подачи данных в модель при обучении;  
-4. Для создания модели использовалась техника Transfer-Learning: как основа загружалась EfficientNetB6 с исключением полносвязных слоев, которые определяют набор вероятностей к каждому классу ImageNet (исключение "головы"). Вместо исключенных слоев достраивались полносвязные слои под нашу задачу.
-5. В основе тренировки модели использовалась техника Fine-Tunning: тренировка модели проводилась с постепенным размораживанием весов слоев, доступных для тренировки и состояла из нескольких шагов (step):  
-
-    Step 1 - тренировка весов слоев только для "головы", с неизменными весами EfficientNetB6 (уже после данного этапа точность на тренировочной выборке превышает 50%, на тестовой - превышает 60%). Так как в дальнейшем веса будут переобучаться при разморозке модели, то на данном этапе было выбрано небольшое количество эпох обучения. Точность на тренировочной выборке оказывается хуже, но к 5 эпохе точность тестовой выборки перестает улучшаться, а точность тренировочной выборки растет быстрее.  
+ 
     
-    Step 2-4 - тренировка с постепенной разморозкой весов слоев EfficientNetB6. Step 2: разморозка 1/2 от всех слоев EfficientNetB6, тренировка 10 эпох; Step 3: разморозка 3/4 от всех слоев EfficientNetB6, тренировка 10 эпох; Step 4: разморозка всех слоев EfficientNetB6, тренировка 10 эпох.      
-    Результаты по обучению на шагах 2-4:  
-    Наилучшая сходимость тренировочиной и тестовой выборок достигается после Step 2 (разморозка 1/2 от всех слоев EfficientNetB6) на 10 эпохе и составляет чуть больше 90%. На данном этапе можно попробовать большее количество эпох (30-50 эпох) с постепенным (по расписанию или по условию неувеличения val_accuracy) уменьшением Learning Rate. Но так как время на обучение ограничено количеством времени использования GPU и слои будут размораживаться далее, соответственно обученные веса будут еще изменяться, то было решено не работать в этом направлении.  
-    На шаге 3 (step 3) размораживаю 3/4 всех слоев и обучаю 10 эпох.
-    На шаге 4 (step 4) размораживаю всех слои base_model (всех слоев EfficientNetB6) и обучаю 10 эпох. 
-    
-    Шаги 5-7 (Step 5, 6, 7: На данных шагах для увеличесния точности обучения модели производится увеличение размера подаваемых изображений в 2 раза (с 224х228 до 448х448 точек). Обучение происходит при всех размороженных слоях, но при этом меняется learning rate: Step 5, LR=1e-5, 8 эпох, Step 6 LR=1e-5, 6 эпох (отключение GPU Colab), Step 7 LR=1e-6, 10 эпох. Примечание: На Step 6 было решено добавить еще 6 эпох без изменения параметров шага 5_1.  
-    Важно отметить, что при увеличении картинки в 2 раза, время на обучение возрасло примерно в 3-4 раза и обучение 10 эпох каждого шага растягивается примерно до 6,5 часов. В связи с тем, что на Kaggle есть ограничение на работу одной сессии с GPU (9 часов) и прогнать весь ноутбук и сохранить все результаты можно только исключив данные ограничения. Аналогично есть ограничения на использования GPU и в Google Colab. Поэтому в данной работе я сохранил, только ноутбук и результаты предсказания на валидационной выборке (submission).
-    На шаге 7 параметр patience в callback ReduceLROnPlateau , был изменен с 3 на 2 (количество эпох, после которых, если не увеличается точность, то уменьшается learning rate)
     
 6. Далее для возможного улучшения предсказания качества модели на валидационной выборке использовалась техника Test Time Augmentations, которая основывается на небольших изменениях данных валидационной выборки (аугментация валидационной выборки) и усреднении полученных предсказаний (небольшие изменения могут помочь модели правильно предсказать класс изображения).
 
