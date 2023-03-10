@@ -182,8 +182,14 @@ add description
 
 ## Inference
 <details>
-add description
-.....
+<summary>General description </summary> <br>
+<p>The term inference in this project means proving multi-classification of car images with trained model. The application gets to the entrance image, converts image to an array for feeding to the model input and makes a prediction with trained model.</p>  
+
+<p>To carry out an inference perform in the terminal:
+```Python
+python main.py
+```
+Then follow the prompts and choose the mode of operation of the program: demonstration mode or manual input of the image path.</p>
 </details>
 
 
