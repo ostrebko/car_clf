@@ -61,6 +61,7 @@ The analysis of similar images can lead to an error in human recognition. For ex
 
 
 ## Project structure
+
 <details>
 <summary>Display project structure </summary> <br>
 
@@ -100,12 +101,13 @@ car_clf
 ├── readme.md  
 └── requirements.txt
 ```
-</details>  <br>
+
+</details>
 
 
 ## Instalation
-<details>
 
+<details>
 <summary> Display how to install app </summary> <br>
 
 <p> This section provides a sequence of steps for installing and launching the application. <br>
@@ -125,15 +127,14 @@ pip install -r requirements.txt
 # 5. Create predicts of detection blastospores with main.py or create & run main.exe (in windows).
 python main.py
 ```
-</details>  <br>
+
+</details>
 
 
 ## Activation env
+
 <details>
-
-<p> The description of how to activate the virtual environment was taken from <a href="https://kayumov.ru/536/">Ruslan Kayumov</a>.<br>
-
-<summary> Type in the console: </summary> <br>
+<summary>Display how to create venv </summary> <br>
 
 ```Python
 # Steps to activate the virtual environment in which you plan to launch the application in VsCode:
@@ -159,23 +160,31 @@ pip install ipykernel
 
 # 5. If you need to exit, then execute deactivate in PowerShell, and return to global in the interpreter selection.
 ```
+
 </details>
 
 
 ## Loading data
+
 <details>
+<summary> Display how to download data </summary> <br>
+
 <p>Before training the model, it's necessary to download training dataset. **Attention**, it requires **1,66 Gb** of free disk spaces.</p>
 <p>If you want to train the model in local machine, go to the [**Kaggle web page**](https://www.kaggle.com/competitions/sf-dl-car-classification/data/) in your browser and tap **Download All**, the file *'sf-dl-car-classification.zip'* will start downloading. Then move downloaded *'sf-dl-car-classification.zip'* in 'data' folder of the cloned project.</p>
 <p>If you use notebook **'02_colab_notebook_train_model.ipynb'** for train model with Google Colab, you don't need to download data to local machine. Notebook consist cells with code to download *'sf-dl-car-classification.zip'* into cloned project in Goole Colab environment.</p>
 <p>You also may to use Kaggle API to download -> *'kaggle competitions download -c sf-dl-car-classification'* 
 (see. [Kaggle API in github](https://github.com/Kaggle/kaggle-api) ).</p>
 <p>To unzip *'sf-dl-car-classification.zip'* into cloned project use the corresponding notebook cells.</p>
+
 </details>
 
 
 ## Training model
+
 <details>
-<p>Basic steps of model preparation:  
+<summary>Display description of steps training model </summary> <br>
+
+<p>Basic steps of model preparation:</p>
 
 1. Installing and importing the necessary libraries, functions and classes, fixing seed values, creating the necessary folders for data and saving results and unpacking the 'sf-dl-car-classification' archive.zip' (if not done earlier);  
 Note: [Solving a possible error in Keras](https://discuss.tensorflow.org/t/using-efficientnetb0-and-save-model-will-result-unable-to-serialize-2-0896919-2-1128857-2-1081853-to-json-unrecognized-type-class-tensorflow-python-framework-ops-eagertensor/12518/9)  
@@ -219,19 +228,42 @@ Note: [Solving a possible error in Keras](https://discuss.tensorflow.org/t/using
     It is important to note that when the image is enlarged by 2 times, the training time has increased by about 3-4 times and the training of 10 epochs of each step stretches to about 6.5 hours. Due to the fact that Google Colab has a limit on the operation of one session with the GPU, **Step 5** and **Step 6** were separated. If you can to train 20 epoch without stopping train, change: config.EPOCHS = 20 and skip **Step 6**.<br>
     At **Step 7**, the only *patience* parameter in the callback *ReduceLROnPlateau* was changed from 3 to 2.<br>
 
+    6. To possibly improve the prediction quality of the model on a validation sample, the **Test Time Augmentations** technique was used, which is based on small changes in the validation sample data (augmentation of the validation sample) and averaging of the predictions obtained (small changes can help to the model correctly predict the image class).<br>
+
+<p>To optimize the code, functions and classes were written, including:</p>
+
+- recording the parameters used in data_config.json and it's import into a notebook;
+- the function of creating data generators;
+- model architecture definition class;
+- the function of assembling the callbacks list when training the model;
+- functions for saving and displaying accuracy and loss training graphs by epoch for analyzing the quality of model training;
+- the function of saving the model to a separate project folder;
+- the function of predicting the class of the photo (inference of the model) in demo mode and with manual input of the image path.
+
+The results of the model prediction on the validation sample are presented in the file submission.csv.
+Since when training the model, files are obtained in large volume (up to 450 MB), their weights are laid out in [cloud storage](https://drive.google.com/drive/folders/1myedVEqymkIYCOzOj18ChFHfSvswdRv1). To conduct training on a laptop or inference, they must be placed in the 'models' folder.<br>
+
+Model training can be done in Google Colab. A notebook '02_colab_notebook_train_model.ipynb' has been prepared for the project for this purpose, with cloning the project and uploading training data to the Google Colab virtual environment.<br>
+
 </details>
 
 
 ## Inference
+
 <details>
 <summary>General description </summary> <br>
+
 <p>The term inference in this project means proving multi-classification of car images with trained model. The application gets to the entrance image, converts image to an array for feeding to the model input and makes a prediction with trained model.</p>  
 
-<p>To carry out an inference perform in the terminal:
+<p>To carry out an inference perform in the terminal:</p>
+
 ```Python
 python main.py
+
 ```
-Then follow the prompts and choose the mode of operation of the program: demonstration mode or manual input of the image path.</p>
+
+<p>Then follow the prompts and choose the mode of operation of the program: demonstration mode or manual input of the image path.</p>
+
 </details>
 
 
@@ -262,33 +294,16 @@ add description
 </details>
 
 
-## Other temp text for create readme
-<details>
+## Conclusions
 
- 
-    
-    
-6. Далее для возможного улучшения предсказания качества модели на валидационной выборке использовалась техника Test Time Augmentations, которая основывается на небольших изменениях данных валидационной выборки (аугментация валидационной выборки) и усреднении полученных предсказаний (небольшие изменения могут помочь модели правильно предсказать класс изображения).
+<p>During the work on the project, an application that predicts the car model from the image (10 different classes of prediction are available in the project: "Lada Priora", "Ford Focus", "Lada 2114", "Lada 2107", "Lada Niva", "Lada Kalina", "Lada 2109", "Volkswagen Passat", "Lada 21099") was developed. The model, as well as the application itself, can be used as a basis for practical implementation in more complex applications and systems, for example, for database processing, for checking the license plate and model of cars, for security systems.</p>  
 
-Для сокращения написания кода на каждом шаге были написаны функции и классы в т.ч.:  
-- запись используемых параметров в data_config.json и его импорт в ноутбук;
-- функция создания генераторов данных;
-- класс определения архитектуры модели модели;
-- функция сборки листа callbacks при обучении модели; 
-- функции сохранения и вывода на экран accuracy и loss по эпохам после обучения модели для анализа качества обучения модели; 
-- функция сохранения модели в отдельную папку проекта;
-- функция выполнения предсказания класса фотографии (инференса модели).  
+Using the method of gradual defrosting of layers allowed us to obtain the quality of the model on a test sample of more than 97%.
 
 
-Результаты предсказания модели на валидационной выборке представлены в файле submission.csv.   
-Так как при обучении модели файлы получаются большого объема (до 450 Мб), то их веса выложены в облачном хранилизе: https://drive.google.com/drive/folders/1myedVEqymkIYCOzOj18ChFHfSvswdRv1?usp=sharing. Для проведения обучения в ноутбуке или инференса их необходимо поместить в папку 'models'.   
+<p>To improve the model, you can try the following steps:</p>
 
-
-Что еще можно сделать для улучшения модели/доработки проекта:
-1. Попробовать другие архитектуры сетей из SOTA на ImageNet позднее B6, дающие бОльшую точность, например ImageNetB7 или более точные SOTA.  
-2. Поэкспериментировать с архитектурой «головы» (например, добавить еще 1-2 полносвязных слоев).  
-3. Попробовать больше эпох на 5 этапе обучения (увеличить до 30 эпох с callback ReduceLROnPlateau с параметрами monitor='val_accuracy', factor=0.2-0.5, patience=3-5).  
-4. Использовать внешние датасеты для дообучения модели.  
-5. Обернуть модель в сервис на Flask (чтобы на практике отследить особенности внедрения DL-моделей в продакшн).  
-
-</details>
+1. Try other network architectures from SATA to ImageNet later B6, giving greater accuracy, for example ImageNetB7 or more accurate SOTA.
+2. Experiment with the architecture of the "head" (for example, add 1-2 more fully connected layers).
+3. Try more epochs at 5,6,7 stages of training (increase to 30 epochs with callback ReduceLROnPlateau with parameters monitor='val_accuracy', factor=0.2-0.5, patience=2-5).
+4. Use external datasets to retrain the model.
