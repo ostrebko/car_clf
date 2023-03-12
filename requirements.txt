@@ -9,3 +9,4 @@ pandas
 seaborn
 scikit-image
 scikit-learn
+flask
