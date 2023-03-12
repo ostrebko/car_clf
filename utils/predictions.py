@@ -7,7 +7,7 @@ from utils.functions_with_keras import create_model
 
 
 
-def create_prediction(img_path, config, model):
+def create_prediction(new_image, config, model): #img_path
     
     """
     Function for creating prediction (classification) for one image.
@@ -22,9 +22,8 @@ def create_prediction(img_path, config, model):
 
     """
 
-
     # load a single image
-    new_image = load_image(img_path, config)
+    #new_image = load_image(img_path, config)
 
     # check prediction
     pred = model.predict(new_image)
@@ -32,9 +31,7 @@ def create_prediction(img_path, config, model):
     class_num = np.argmax(pred, axis=1)[0]
     class_name = config.class_names[class_num]
 
-    print(f'for image {os.path.basename(img_path)} ' 
-          f'predicted class and class_name: {(class_num, class_name)}')
-    #return class_num, class_name
+    return class_num, class_name
 
 
 
@@ -56,13 +53,21 @@ def make_predictions(config):
 
 
     demonstrate_mode = config.demo[input('input 1 - to run in demonstrate mode, '
-                                         '0 - to run with handle input image path ' )]
-    paths = create_paths(config, is_notebook=False)
+                                         '0 - to run with handle input image path: ' )]
+    paths = create_paths(config, is_not_in_root=False)
     model = create_model(config, is_choice_by_input=False)
 
     while config.continue_predict:
+        
         img_path = get_path_image(paths, is_work_demonstrate=demonstrate_mode)
-        create_prediction(img_path, config, model)
+        
+        # load a single image
+        new_image = load_image(img_path, config)
+
+        class_num, class_name = create_prediction(new_image, config, model)
+
+        print(f'for image {os.path.basename(img_path)} ' 
+              f'predicted class and class_name: {(class_num, class_name)}')
         
         num_choise = input('input any num or simbol to continue predict, to exit - 0: ')
         if num_choise == '0':

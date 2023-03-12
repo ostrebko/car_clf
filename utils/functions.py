@@ -9,7 +9,7 @@ import zipfile
 
 
 
-def create_paths(config, is_notebook=True):
+def create_paths(config, is_not_in_root=True):
     
     """
     Create paths to read, save and load data, models for train and inference
@@ -19,13 +19,14 @@ def create_paths(config, is_notebook=True):
     
     config - dict (Dotmap) from configuration file with defined parameters values 
              (creates from config_reader function by reading data_config.json)
-    is_notebook=True for notebook train or is_notebook=False for main.py inference
+    is_not_in_root=True for notebook train, server.py, client.py or 
+    is_not_in_root=False for main.py inference or run app .py in root dir
     
     """
     
     paths_dict = dict()
 
-    if is_notebook:
+    if is_not_in_root:
         paths_dict['PATH_DATA'] = os.path.join('..', config.PATH_DATA)
         paths_dict['PATH_MODELS'] = os.path.join('..', config.folder_models)
     else: 
