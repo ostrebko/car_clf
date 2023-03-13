@@ -14,7 +14,7 @@ if __name__ == '__main__':
     r = requests.post('http://localhost:5000/predict', json={"im_b64": im_b64_str})
     
     if r.status_code == 200:
-        print(f"For image: {img_path} predict classification: ", 
+        print(f"For image: {img_path} classification prediction: ", 
               f"class_num: {r.json()['class_num']}, class_name:{r.json()['class_name']}")
     else:
         print(r.status_code, 'Check your request')
