@@ -25,7 +25,7 @@
 The classification of cars by model is an actual problem and finds application in business and in ensuring safety. The solution of this problem with using machine learning models can be carried out if a lot of time is spent on classification, for example, when processing databases, or the object is in the field of view for a short time, which is not enough to identify the object. As an example, the recognizing of the number and model of the car in any application or during the operation of the security system.<br>
 
 <p align="center">
-  <img src="https://tecon.com.vn/datafiles/32545/upload/files/smart-parking.jpg?t=1622781813" height="200" title="Work with databases">
+  <img src="https://antes-nn.ru/wp-content/uploads/2020/11/grafic_car2.jpg" height="200" title="Work with databases">
   <img src="https://news-ru.gismeteo.st/2020/07/shutterstock_443707396-640x427.jpg" height="200" title="Traffic regulations">
 </p>
 <p align="center">
