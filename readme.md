@@ -16,7 +16,7 @@
 * [Training model](README.md#Training-model)
 * [Inference](README.md#Inference)
 * [Docker](README.md#Docker)
-* [Flask](README.md#Flask)
+* [Client Server App](README.md#Client-Server-App)
 * [Conclusions](README.md#Conclusions) <br><br>
 
 
@@ -259,7 +259,6 @@ Model training can be done in Google Colab. A notebook '02_colab_notebook_train_
 
 ```Python
 python main.py
-
 ```
 
 <p>Then follow the prompts and choose the mode of operation of the program: demonstration mode or manual input of the image path.</p>
@@ -287,10 +286,39 @@ docker rmi car_clf
 </details>
 
 
-## Flask
+## Client Server App
 <details>
-add description
-.....
+
+<summary> Brief describe and display how to run client-server app </summary> <br>
+
+The **client-server** application is developed using Flask.  
+The **client.py** application accepts the image path (full or relative) as input. The image is read into a variable, then converted to bytes type data and then to string type. A post request (sending converted json data) is made to the local server (*http://localhost:5000*) with endpoint *'predict'*. After processing the request by the server, if the status code is 200, the client returns the predicted number and class name for the image, else return status code from server and message 'Check your request'.  
+
+The **server.py** application implements:  
+
+- loading a configuration file and a dictionary of paths;
+- loading the trained model;
+- processing of post-request data into a tensor accepted as input by the model;
+- prediction of the number and class name of the car image;
+- processing the post-request and sending a response to the client application.
+
+The application is launched on the localhost:5000 with an endpoint *'/predict'*.
+
+Steps to run **client-server** application:
+- вefore running apps activate virtual environment (see sect. 'Activation env').
+- run **server.py** application:
+
+```Python
+python server.py
+```
+- open another terminal and run **client.py** application:
+
+```Python
+python client.py
+```
+- input full img path or relative image path in this project
+- to close server press *'CTRL+C'*
+
 </details>
 
 
