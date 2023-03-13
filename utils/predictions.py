@@ -54,7 +54,7 @@ def make_predictions(config):
 
     demonstrate_mode = config.demo[input('input 1 - to run in demonstrate mode, '
                                          '0 - to run with handle input image path: ' )]
-    paths = create_paths(config, is_not_in_root=False)
+    paths = create_paths(config, is_in_root=True)
     model = create_model(config, is_choice_by_input=False)
 
     while config.continue_predict:
