@@ -97,9 +97,13 @@ car_clf
 │   ├── generators.py  
 │   ├── model.py  
 │   ├── predictions.py  
-│   └── read_config.py  
+│   └── read_config.py
+├── client.py  
+├── Dockerfile  
+├── main.py  
 ├── readme.md  
-└── requirements.txt
+├── requirements.txt  
+└── server.py
 ```
 
 </details>
