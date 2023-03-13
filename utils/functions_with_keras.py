@@ -1,3 +1,4 @@
+import base64
 from dotmap import DotMap
 from glob import glob
 import matplotlib.pyplot as plt
@@ -8,6 +9,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from tensorflow import keras
 from keras import optimizers
 import keras.utils as image
+from PIL import Image
+import io
 
 from ImageDataAugmentor.image_data_augmentor import *
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau # LearningRateScheduler
@@ -285,3 +288,17 @@ def load_image(img_path, config, show=True):
         plt.close("all")
 
     return img_tensor
+
+
+def decode_image(im_b64_str, config):
+    img_bytes = base64.b64decode(im_b64_str.encode('utf-8')) # convert it into bytes
+    
+    # convert bytes data to PIL Image object
+    img = Image.open(io.BytesIO(img_bytes))
+    img = img.resize((config.IMG_SIZE, config.IMG_SIZE), Image.Resampling.LANCZOS)
+
+    # PIL image object to numpy array
+    img = image.img_to_array(img)
+    img_arr = np.expand_dims(img, axis=0)
+    img_arr /= 255.
+    return img_arr

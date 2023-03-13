@@ -1,3 +1,4 @@
+import base64
 from dotmap import DotMap
 from glob import glob
 import matplotlib.pyplot as plt
@@ -9,7 +10,7 @@ import zipfile
 
 
 
-def create_paths(config, is_not_in_root=True):
+def create_paths(config, is_in_root=False):
     
     """
     Create paths to read, save and load data, models for train and inference
@@ -19,19 +20,19 @@ def create_paths(config, is_not_in_root=True):
     
     config - dict (Dotmap) from configuration file with defined parameters values 
              (creates from config_reader function by reading data_config.json)
-    is_not_in_root=True for notebook train, server.py, client.py or 
-    is_not_in_root=False for main.py inference or run app .py in root dir
+    is_in_root=True for main.py inference or run app .py in root dir or 
+    is_in_root=False for notebook train
     
     """
     
     paths_dict = dict()
 
-    if is_not_in_root:
-        paths_dict['PATH_DATA'] = os.path.join('..', config.PATH_DATA)
-        paths_dict['PATH_MODELS'] = os.path.join('..', config.folder_models)
-    else: 
+    if is_in_root:
         paths_dict['PATH_DATA'] = config.PATH_DATA
         paths_dict['PATH_MODELS'] = config.folder_models
+    else: 
+        paths_dict['PATH_DATA'] = os.path.join('..', config.PATH_DATA)
+        paths_dict['PATH_MODELS'] = os.path.join('..', config.folder_models)
 
     paths_dict['PATH_DATA_TRAIN'] = os.path.join(paths_dict['PATH_DATA'], 
                                                  config.folder_data_train)
@@ -205,4 +206,10 @@ def get_path_image(paths_dict, is_work_demonstrate=True):
             is_path_input = os.path.exists(path_rnd_img)
 
     return path_rnd_img
-        
+
+
+def encode_image(img_path):
+    with open(img_path, "rb") as f:
+        im_bytes = f.read()     
+    im_b64_str = base64.b64encode(im_bytes).decode("utf8")
+    return im_b64_str
