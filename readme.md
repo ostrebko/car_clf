@@ -199,8 +199,8 @@ Note: [Solving a possible error in Keras](https://discuss.tensorflow.org/t/using
     **Step 1** - training of layer weights only for the "head", with constant EfficientNetB6 weights (after this step, the accuracy on the training sample exceeds 50%, on the test sample exceeds 60%). Since in the future the weights will be retrained when the model is defrosted, a small number of training epochs were selected at this stage. Note: The accuracy on the training sample turns out to be worse than the accuracy on the test sample, but by the 5th epoch, the accuracy of the test sample ceases to improve, and the accuracy of the training sample grows faster (see. Train history of accuracy and loss in Pic.1).<br>
 
     <p align="center">
-      <img src="data/outputs_from_train/step_1_acc_train.png" height="240" title="history_acc_train step_1">
-      <img src="data/outputs_from_train/step_1_loss_train.png" height="240" title="history_loss_train step_1">
+      <img src="data/outputs_from_train/step_1_acc_train.jpg" height="240" title="history_acc_train step_1">
+      <img src="data/outputs_from_train/step_1_loss_train.jpg" height="240" title="history_loss_train step_1">
     </p> 
 
     **Step 2-4** - training with gradual defrosting of body weights (i.e. layers of EfficientNetB6). Step 2: defrost 1/2 from all layers EfficientNetB6, training 10 epochs; Step 3: defrost 3/4 from all layers EfficientNetB6, training 10 epochs; Step 4: defrost all layers EfficientNetB6, training 10 epochs.<br> 
@@ -208,22 +208,22 @@ Note: [Solving a possible error in Keras](https://discuss.tensorflow.org/t/using
     The best convergence of the training and test samples is achieved after **Step 2** (defrosting 1/2 of all the layers of EfficientNetB6) at the 10th epoch and is slightly more than 90%. At this stage, you can try a larger number of epochs (30-50 epochs) with a gradual (according to the schedule or according to the condition of non-exaggeration of val_accuracy) decrease in the Learning Rate. But since in Colab the training time is limited by the amount of GPU usage time and the layers will be unfrozen further, respectively, the trained weights will still change, it was decided not to work in this direction.<br>
 
     <p align="center">
-      <img src="data/outputs_from_train/step_2_acc_train.png" height="240" title="history_acc_train step_2">
-      <img src="data/outputs_from_train/step_2_loss_train.png" height="240" title="history_loss_train step_2">
+      <img src="data/outputs_from_train/step_2_acc_train.jpg" height="240" title="history_acc_train step_2">
+      <img src="data/outputs_from_train/step_2_loss_train.jpg" height="240" title="history_loss_train step_2">
     </p> 
 
     At **step 3**, 3/4 of all layers was defrosted and 10 epochs trained.<br>
 
     <p align="center">
-      <img src="data/outputs_from_train/step_3_acc_train.png" height="240" title="history_acc_train step_3">
-      <img src="data/outputs_from_train/step_3_loss_train.png" height="240" title="history_loss_train step_3">
+      <img src="data/outputs_from_train/step_3_acc_train.jpg" height="240" title="history_acc_train step_3">
+      <img src="data/outputs_from_train/step_3_loss_train.jpg" height="240" title="history_loss_train step_3">
     </p> 
 
     At **step 4**, all base_model layers (all EfficientNetB6 layers) was defrosted and 10 epochs trained.<br>
 
     <p align="center">
-      <img src="data/outputs_from_train/step_4_acc_train.png" height="240" title="history_acc_train step_4">
-      <img src="data/outputs_from_train/step_4_loss_train.png" height="240" title="history_loss_train step_4">
+      <img src="data/outputs_from_train/step_4_acc_train.jpg" height="240" title="history_acc_train step_4">
+      <img src="data/outputs_from_train/step_4_loss_train.jpg" height="240" title="history_loss_train step_4">
     </p> 
 
     After **Step 3** the accuracy and loss of train and test dataset are diverge, but accuracy on test dataset has a better value than in the previous **Step 2** (see Pic.3). So we try to defrost all layers and train **Step 4**. After **Step 4** it can be seen that the accuracy and loss of train and test dataset are diverge less. The test accuracy continues to grow, and loss continues to continues to decrease. So it time to try **Step 5** to get better training results.<br>
