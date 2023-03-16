@@ -3,7 +3,7 @@
 
 ## Summary
 
-<p>This application allows to carry out a multi-class classification of the car model by image. Classification is carried out according to the following 10 classes: "Lada Priora", "Ford Focus", "Lada 2114", "Lada 2107", "Lada Niva", "Lada Kalina", "Lada 2109", "Volkswagen Passat", "Lada 21099". The application presents a notebook for training a model. The basic idea for preparing a notebook is to take a pre-trained model and retrain it to perform the task of classifying a car by image.</p><br>
+<p>This application allows to carry out of a multi-class classification of the car model by image. Classification is performed for the following 10 classes: "Lada Priora", "Ford Focus", "Lada 2114", "Lada 2107", "Lada Niva", "Lada Kalina", "Lada 2109", "Volkswagen Passat", "Lada 21099". The application presents a notebook for training a model with following basic idea: is to take a pre-trained model and retrain it to perform the task of classifying a car by image.</p><br>
 
 
 ## Contents
@@ -22,7 +22,7 @@
 
 ## Introduction
 <p>
-The classification of cars by model is an actual problem and finds application in business and in ensuring safety. The solution of this problem with using machine learning models can be carried out if a lot of time is spent on classification, for example, when processing databases, or the object is in the field of view for a short time, which is not enough to identify the object. As an example, the recognizing of the number and model of the car in any application or during the operation of the security system.<br>
+The classification of cars by model is an actual problem and finds application in business and in ensuring safety. The solution to this problem by using machine learning models can be carried out if a lot of time is spent on classification, for example, when processing databases or the object is in the field of view for a short time, which is not enough to identify the object. As an example, the recognizing the number and model of the car in any application or during the operation of the security system.<br>
 
 <p align="center">
   <img src="https://antes-nn.ru/wp-content/uploads/2020/11/grafic_car2.jpg" height="200" title="Work with databases">
@@ -32,7 +32,7 @@ The classification of cars by model is an actual problem and finds application i
   <img src="https://avatars.mds.yandex.net/i?id=a7700bda361df26e6eb36d4c9c4a09cc-4080622-images-thumbs&ref=rim&n=33&w=281&h=188" height="200" title="Check payment for parking">
 </p>
 
-The task of developing an application includes task of training a machine learning model. To train the model, we will use photos from ads for the sale of cars that are in the public domain.
+The task of developing an application includes the task of training a machine learning model. To train the model, we will use photos from ads for the sale of cars that are in the public domain.
 
 <p align="center">
   <img src="data/test_imgs_for_pred/352.jpg" height="120" title="lada_niva">
@@ -128,7 +128,7 @@ cd car_clf
 # 4. Install requirements:
 pip install -r requirements.txt
 
-# 5. Create predicts of detection blastospores with main.py or create & run main.exe (in windows).
+# 5. Create predicts of classification cars with main.py.
 python main.py
 ```
 
@@ -257,7 +257,7 @@ Model training can be done in Google Colab. A notebook '02_colab_notebook_train_
 <details>
 <summary>General description </summary> <br>
 
-<p>The term inference in this project means proving multi-classification of car images with trained model. The application gets to the entrance image, converts image to an array for feeding to the model input and makes a prediction with trained model.</p>  
+<p>The term inference in this project means proving the multi-classification of car images with a trained model. The application gets to the entrance image, converts image to an array for feeding to the model input, and makes a prediction with the trained model.</p>  
 
 <p>To carry out an inference perform in the terminal:</p>
 
@@ -293,7 +293,7 @@ docker rmi car_clf
 ## Client Server App
 <details>
 
-<summary> Brief describe and display how to run client-server app </summary> <br>
+<summary> Brief describe and display how to run the client-server app </summary> <br>
 
 The **client-server** application is developed using Flask.  
 The **client.py** application accepts the image path (full or relative) as input. The image is read into a variable, then converted to bytes type data and then to string type. A post request (sending converted json data) is made to the local server (*http://localhost:5000*) with endpoint *'predict'*. After processing the request by the server, if the status code is 200, the client returns the predicted number and class name for the image, else return status code from server and message 'Check your request'.  
@@ -328,14 +328,14 @@ python client.py
 
 ## Conclusions
 
-<p>During the work on the project, an application that predicts the car model from the image (10 different classes of prediction are available in the project: "Lada Priora", "Ford Focus", "Lada 2114", "Lada 2107", "Lada Niva", "Lada Kalina", "Lada 2109", "Volkswagen Passat", "Lada 21099") was developed. The model, as well as the application itself, can be used as a basis for practical implementation in more complex applications and systems, for example, for database processing, for checking the license plate and model of cars, for security systems.</p>  
+<p>During the work on the project, an application that predicts the car model from the image (10 different classes of prediction are available in the project: "Lada Priora", "Ford Focus", "Lada 2114", "Lada 2107", "Lada Niva", "Lada Kalina", "Lada 2109", "Volkswagen Passat", "Lada 21099") was developed. The model, as well as the application itself, can be used as a basis for practical implementation in more complex applications and systems, for example, for database processing, for checking the license plate and model of cars, and for security systems.</p>  
 
 Using the method of gradual defrosting of layers allowed us to obtain the quality of the model on a test sample of more than 97%.
 
 
 <p>To improve the model, you can try the following steps:</p>
 
-1. Try other network architectures from SATA to ImageNet later B6, giving greater accuracy, for example ImageNetB7 or more accurate SOTA.
+1. Try other network architectures from SATA to ImageNet later B6, giving greater accuracy, for example, ImageNetB7 or more accurate SOTA.
 2. Experiment with the architecture of the "head" (for example, add 1-2 more fully connected layers).
 3. Try more epochs at 5,6,7 stages of training (increase to 30 epochs with callback ReduceLROnPlateau with parameters monitor='val_accuracy', factor=0.2-0.5, patience=2-5).
 4. Use external datasets to retrain the model.
